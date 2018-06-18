@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlbionMarketeer"
         mc:Ignorable="d"
-        Title="Albion Marketeer" Height="600" Width="1058.72">
+        Title="Albion Marketeer" Height="600" Width="1058.72" Closing="Window_Closing">
     <Grid HorizontalAlignment="Left" Height="569" VerticalAlignment="Top" Width="1049">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -19,7 +19,7 @@
         <CheckBox Name="sterling" Content="Fort Sterling Market" HorizontalAlignment="Left" Margin="11,91,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
         <CheckBox Name="lymhurst" Content="Lymhurst Market" HorizontalAlignment="Left" Margin="11,111,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
         <DataGrid Name="grid" HorizontalAlignment="Left" Width="1049" Margin="0,199,0,0"/>
-        <TextBox x:Name="search" HorizontalAlignment="Center" Height="28" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="300" FontFamily="DINCondensedC" Margin="381.5,65,367.5,476" FontSize="24"/>
+        <TextBox x:Name="search" HorizontalAlignment="Center" Height="28" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="300" FontFamily="DINCondensedC" Margin="381.5,65,367.5,476" FontSize="24" KeyDown="search_KeyDown"/>
         <TextBlock Height="29" TextWrapping="Wrap" Text="Search" VerticalAlignment="Bottom" FontSize="20" FontWeight="Bold" Margin="451,0,598,399"/>
         <Label Name="loading" Content="" Margin="479,0,479,191.72" VerticalAlignment="Bottom" FontSize="16"/>
         <Button Content="Show Logs" HorizontalAlignment="Left" Margin="964,10,0,0" VerticalAlignment="Top" Width="75" Click="log_button_Click"/>

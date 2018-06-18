@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Net;
 using System.Windows;
+using System.Threading;
 
 namespace AlbionMarketeer
 {
@@ -57,21 +58,16 @@ namespace AlbionMarketeer
 
             NetworkInterface nia = null;
 
-            Console.WriteLine("Waiting for Albion-Online process.");
+            Console.WriteLine("Waiting for Albion-Online process.", false);
             log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Waiting for Albion-Online process.")));
 
             do
             {
-                Task.Delay(3000);
-                try
-                {
-                    nia = getAdapterUsedByProcess("Albion-Online");
-                }
-                catch (Exception ex)
-                {
-                    Console.Write(".");
-                }
-                
+                Thread.Sleep(1000);
+                nia = getAdapterUsedByProcess("Albion-Online");
+
+                Console.Write(".");
+                log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog(".", false)));
             }
             while (nia == null);
             Console.WriteLine();
@@ -90,7 +86,6 @@ namespace AlbionMarketeer
 
             Console.WriteLine(String.Concat("Selected network device ", selectedDevice.Description));
             log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog(String.Concat("Selected network device ", selectedDevice.Description))));
-            log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("This program only works on Ethernet networks.")));
             // Open the device
             using (PacketCommunicator communicator =
                 selectedDevice.Open(65536, // portion of the packet to capture
@@ -262,7 +257,7 @@ namespace AlbionMarketeer
         {
             Process[] candidates = Process.GetProcessesByName(pName);
             if (candidates.Length == 0)
-                throw new Exception("Cannot find any running processes with the name " + pName + ".exe");
+                return null;
 
             IPAddress localAddr = null;
             using (Process p = candidates[0])
@@ -277,7 +272,7 @@ namespace AlbionMarketeer
             }
 
             if (localAddr == null)
-                throw new Exception("No routing information for " + pName + ".exe found.");
+                return null;
 
             foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
             {

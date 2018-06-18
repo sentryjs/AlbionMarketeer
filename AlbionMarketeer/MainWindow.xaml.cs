@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Net.Http;
@@ -25,7 +26,6 @@ namespace AlbionMarketeer
     public partial class MainWindow : Window
     {
         Logic logic;
-        public event Action<string> MyEvent = delegate { };
         private static HttpClient client = new HttpClient();
         public static Window window;
         public static Log log_window;
@@ -38,39 +38,8 @@ namespace AlbionMarketeer
 
             log_window = new Log();
             logic = new Logic(log_window);
-            //log_window.Hide();
+
             Task.Run(() => { logic.StartPCAP(); });
-        }
-
-        private static List<string> FindItems(string search)
-        {
-            string xmlLocalization = "localization.xml";
-
-            DataSet itemsds = new DataSet();
-            itemsds.ReadXml(xmlLocalization, XmlReadMode.InferSchema);
-
-            DataTableCollection tables = itemsds.Tables;
-
-            List<string> found = new List<string>();
-
-            foreach (DataTable table in tables)
-            {
-                if (table.TableName != "tuv") continue;
-
-                foreach (var row in table.AsEnumerable())
-                {
-                    if (row[0].ToString().ToLower().Contains(search.ToLower().Trim()))
-                    {
-                        foreach (var parent in tables["tu"].AsEnumerable())
-                        {
-                            if (row[2].ToString() == parent[0].ToString() && parent[1].ToString().StartsWith("@ITEMS_")) found.Add(parent[1].ToString().Substring(7));
-                        }
-                    }
-                }
-            }
-
-            if (found.Count > 0) Console.WriteLine(found.First().ToString());
-            return found;
         }
 
         public static string GetAppLocation()
@@ -78,15 +47,57 @@ namespace AlbionMarketeer
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        private async void SearchAsync(object sender, RoutedEventArgs e)
+        public Task<List<string>> FindItems(string search)
+        {
+            var taskCompletionSource = new TaskCompletionSource<List<string>>();
+            Task<List<string>> task = Task.Factory.StartNew(() =>
+            {
+                string xmlLocalization = "localization.xml";
+
+                DataSet itemsds = new DataSet();
+                itemsds.ReadXml(xmlLocalization, XmlReadMode.InferSchema);
+
+                DataTableCollection tables = itemsds.Tables;
+
+                List<string> found = new List<string>();
+
+                foreach (DataTable table in tables)
+                {
+                    if (table.TableName != "tuv") continue;
+
+                    foreach (var row in table.AsEnumerable())
+                    {
+                        if (row[0].ToString().ToLower().Contains(search.ToLower().Trim()))
+                        {
+                            foreach (var parent in tables["tu"].AsEnumerable())
+                            {
+                                if (row[2].ToString() == parent[0].ToString() && parent[1].ToString().StartsWith("@ITEMS_")) found.Add(parent[1].ToString().Substring(7));
+                            }
+                        }
+                    }
+                }
+
+                if (found.Count > 0) Console.WriteLine(found.First().ToString());
+                return found;
+            });
+            task.ContinueWith(t => taskCompletionSource.SetResult(t.Result));
+            return taskCompletionSource.Task;
+        }
+
+        private void SearchAsync(object sender, RoutedEventArgs e)
         {
             if (string.Empty == search.Text) return;
 
+            caerleon.IsEnabled = false;
+            bridgewatch.IsEnabled = false;
+            martlock.IsEnabled = false;
+            thetford.IsEnabled = false;
+            sterling.IsEnabled = false;
+            lymhurst.IsEnabled = false;
             search.IsEnabled = false;
             search_button.IsEnabled = false;
             loading.Content = "Loading...";
 
-            List<string> Items = FindItems(search.Text);
             List<string> Locations = new List<string>();
 
             if ((bool)caerleon.IsChecked)
@@ -115,15 +126,34 @@ namespace AlbionMarketeer
             }
 
             string Locations_joined = string.Join(",", Locations);
-            string Items_joined = string.Join(",", Items);
-            string result = "";
 
-            string url = $"https://www.albion-online-data.com/api/v1/stats/prices/{Items_joined}?locations={Locations_joined}";
-            result = await GetAPIData(url);
+            List<string> Items;
+            var task = FindItems(search.Text);
+            task.ContinueWith(t =>
+            {
+                Items = t.Result;
+                string Items_joined = string.Join(",", Items);
+                return $"https://www.albion-online-data.com/api/v1/stats/prices/{Items_joined}?locations={Locations_joined}";
+            }).ContinueWith(async t =>
+            {
+                string result = "";
+                result = await GetAPIData(t.Result);
 
-            dynamic obj = JsonConvert.DeserializeObject<dynamic>(result);
+                dynamic obj = JsonConvert.DeserializeObject<dynamic>(result);
 
-            grid.ItemsSource = obj;
+                grid.ItemsSource = obj;
+
+                Dispatcher.Invoke(new Action(() => loading.Content = ""));
+                Dispatcher.Invoke(new Action(() => caerleon.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => bridgewatch.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => martlock.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => thetford.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => sterling.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => lymhurst.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => search.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => search_button.IsEnabled = true));
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+            
         }
 
         private async Task<string> GetAPIData(string path)
@@ -132,14 +162,11 @@ namespace AlbionMarketeer
             log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog(response.ReasonPhrase.ToString())));
             if (response.IsSuccessStatusCode)
             {
-                loading.Content = "";
-                search.IsEnabled = true;
-                search_button.IsEnabled = true;
                 return await response.Content.ReadAsStringAsync();
             }
             else
             {
-                return "{\"Error\": \"Request failed!\"}";
+                return "{\"Error\": \"" + response.ReasonPhrase.ToString() + "\"}";
             }
         }
 
@@ -148,6 +175,17 @@ namespace AlbionMarketeer
             log_window.Show();
         }
 
-        
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SearchAsync(new object(), new RoutedEventArgs());
+            }
+        }
     }
 }

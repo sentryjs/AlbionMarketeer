@@ -176,6 +176,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -532,7 +540,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:AlbionMarketeer"
         "ProductCode" = "8:{80E441B1-E30A-4E8A-9211-0E6C3922DEED}"
-        "PackageCode" = "8:{18ED0C8A-F5ED-46AE-AD08-35C47726E220}"
+        "PackageCode" = "8:{0A19CC2D-6024-47D2-BF14-6B9AFE9218E4}"
         "UpgradeCode" = "8:{BB0CB90A-3D1E-4DD3-AC9B-E2FA7FCE8BC6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -654,7 +662,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_25EA9204A908460CA2EE39DEDAC4B8F6"
             {
-            "Name" = "8:AlbionMarketeer"
+            "Name" = "8:Albion Marketeer"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -668,7 +676,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_FE820323D15C4E82BE99D017ACE44077"
             {
-            "Name" = "8:AlbionMarketeer"
+            "Name" = "8:Albion Marketeer"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
