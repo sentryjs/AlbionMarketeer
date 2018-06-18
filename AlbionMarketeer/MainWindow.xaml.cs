@@ -132,16 +132,6 @@ namespace AlbionMarketeer
             task.ContinueWith(t =>
             {
                 Items = t.Result;
-                Dispatcher.Invoke(new Action(() => loading.Content = ""));
-                Dispatcher.Invoke(new Action(() => caerleon.IsEnabled = true));
-                Dispatcher.Invoke(new Action(() => bridgewatch.IsEnabled = true));
-                Dispatcher.Invoke(new Action(() => martlock.IsEnabled = true));
-                Dispatcher.Invoke(new Action(() => thetford.IsEnabled = true));
-                Dispatcher.Invoke(new Action(() => sterling.IsEnabled = true));
-                Dispatcher.Invoke(new Action(() => lymhurst.IsEnabled = true));
-                Dispatcher.Invoke(new Action(() => search.IsEnabled = true));
-                Dispatcher.Invoke(new Action(() => search_button.IsEnabled = true));
-
                 string Items_joined = string.Join(",", Items);
                 return $"https://www.albion-online-data.com/api/v1/stats/prices/{Items_joined}?locations={Locations_joined}";
             }).ContinueWith(async t =>
@@ -152,6 +142,16 @@ namespace AlbionMarketeer
                 dynamic obj = JsonConvert.DeserializeObject<dynamic>(result);
 
                 grid.ItemsSource = obj;
+
+                Dispatcher.Invoke(new Action(() => loading.Content = ""));
+                Dispatcher.Invoke(new Action(() => caerleon.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => bridgewatch.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => martlock.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => thetford.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => sterling.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => lymhurst.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => search.IsEnabled = true));
+                Dispatcher.Invoke(new Action(() => search_button.IsEnabled = true));
             }, TaskScheduler.FromCurrentSynchronizationContext());
             
         }
@@ -162,12 +162,11 @@ namespace AlbionMarketeer
             log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog(response.ReasonPhrase.ToString())));
             if (response.IsSuccessStatusCode)
             {
-
                 return await response.Content.ReadAsStringAsync();
             }
             else
             {
-                return "{\"Error\": \"Request failed!\"}";
+                return "{\"Error\": \"" + response.ReasonPhrase.ToString() + "\"}";
             }
         }
 
@@ -176,6 +175,17 @@ namespace AlbionMarketeer
             log_window.Show();
         }
 
-        
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SearchAsync(new object(), new RoutedEventArgs());
+            }
+        }
     }
 }

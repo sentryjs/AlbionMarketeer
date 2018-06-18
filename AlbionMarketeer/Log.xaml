@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlbionMarketeer"
         mc:Ignorable="d"
-        Title="Log" Height="350.592" Width="796.844">
+        Title="Log" Height="350.592" Width="796.844" ResizeMode="NoResize" Icon="favicon.ico" ShowInTaskbar="False" SizeToContent="WidthAndHeight" Topmost="True" Closing="Window_Closing">
     <Grid>
-        <RichTextBox Name="log" HorizontalAlignment="Left" Height="320" VerticalAlignment="Top" Width="789">
+        <RichTextBox Name="log" HorizontalAlignment="Left" Height="320" VerticalAlignment="Top" Width="789" TextChanged="log_TextChanged">
             <FlowDocument>
                 <Paragraph>
                     <Run Text=""/>

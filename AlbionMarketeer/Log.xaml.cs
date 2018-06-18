@@ -24,10 +24,21 @@ namespace AlbionMarketeer
             InitializeComponent();
         }
 
-        public void AddLog(string log)
+        public void AddLog(string log, bool newline = true)
         {
-            this.log.AppendText(log + "\r");
-            this.log.Focus();
+            if (newline == true) this.log.AppendText(log + "\r");
+            else this.log.AppendText(log);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        private void log_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            log.ScrollToEnd();
         }
     }
 }
