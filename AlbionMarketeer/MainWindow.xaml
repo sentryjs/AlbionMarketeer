@@ -1,0 +1,29 @@
+﻿<Window x:Class="AlbionMarketeer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AlbionMarketeer"
+        mc:Ignorable="d"
+        Title="Albion Marketeer" Height="600" Width="1058.72">
+    <Grid HorizontalAlignment="Left" Height="569" VerticalAlignment="Top" Width="1049">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock HorizontalAlignment="Left" Margin="406,0,0,0" TextWrapping="Wrap" Text="Marketeer" VerticalAlignment="Top" Height="60" Width="234" FontSize="48" FontWeight="Bold"/>
+
+        <CheckBox Name="caerleon" Content="Caerleon Market" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
+        <CheckBox Name="bridgewatch" Content="Bridgewatch Market" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
+        <CheckBox Name="martlock" Content="Martlock Market" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
+        <CheckBox Name="thetford" Content="Thetford Market" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
+        <CheckBox Name="sterling" Content="Fort Sterling Market" HorizontalAlignment="Left" Margin="11,91,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
+        <CheckBox Name="lymhurst" Content="Lymhurst Market" HorizontalAlignment="Left" Margin="11,111,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
+        <DataGrid Name="grid" HorizontalAlignment="Left" Width="1049" Margin="0,199,0,0"/>
+        <TextBox x:Name="search" HorizontalAlignment="Center" Height="28" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="300" FontFamily="DINCondensedC" Margin="381.5,65,367.5,476" FontSize="24"/>
+        <TextBlock Height="29" TextWrapping="Wrap" Text="Search" VerticalAlignment="Bottom" FontSize="20" FontWeight="Bold" Margin="451,0,598,399"/>
+        <Label Name="loading" Content="" Margin="479,0,479,191.72" VerticalAlignment="Bottom" FontSize="16"/>
+        <Button Content="Show Logs" HorizontalAlignment="Left" Margin="964,10,0,0" VerticalAlignment="Top" Width="75" Click="log_button_Click"/>
+        <Button Name="search_button" Content="Search" HorizontalAlignment="Left" Margin="472,111,0,0" VerticalAlignment="Top" Width="98" Height="28" Click="SearchAsync"/>
+
+    </Grid>
+</Window>
