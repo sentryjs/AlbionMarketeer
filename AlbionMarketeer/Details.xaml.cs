@@ -19,20 +19,28 @@ namespace AlbionMarketeer
     /// </summary>
     public partial class Details : Window
     {
-        private ApiOrder apiOrder;
+        private List<ApiOrder> apiOrders;
 
-        public Details(ApiOrder apiOrder)
+        public Details(List<ApiOrder> apiOrders)
         {
             InitializeComponent();
-            this.apiOrder = apiOrder;
+            this.apiOrders = apiOrders;
             Draw();
         }
 
         private void Draw()
         {
-            Title.Text = apiOrder.Name;
-            Bid.Items.Add(new { Price = apiOrder.BuyPriceMin, Date = apiOrder.BuyPriceMinDate });
-            Ask.Items.Add(new { Price = apiOrder.SellPriceMin, Date = apiOrder.SellPriceMinDate });
+            Title.Text = apiOrders.First().Name;
+            foreach (ApiOrder order in apiOrders)
+            {
+                if (order.BuyPriceMinDate != "0001-01-01T00:00:00Z")
+                    Bid.Items.Add(new { Location = order.City, Price = order.BuyPriceMin, Date = order.BuyPriceMinDate });
+
+                if (order.SellPriceMinDate != "0001-01-01T00:00:00Z")
+                    Ask.Items.Add(new { Location = order.City, Price = order.SellPriceMin, Date = order.SellPriceMinDate });
+            }
+            
         }
+
     }
 }
