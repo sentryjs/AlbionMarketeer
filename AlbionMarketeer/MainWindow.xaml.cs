@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -41,6 +42,8 @@ namespace AlbionMarketeer
             InitializeComponent();
             window = this;
 
+            LoadingGif.Visibility = Visibility.Hidden;
+
             log_window = new Log();
             logic = new Logic(log_window);
 
@@ -76,7 +79,7 @@ namespace AlbionMarketeer
                         {
                             foreach (var parent in tables["tu"].AsEnumerable())
                             {
-                                if (row[2].ToString() == parent[0].ToString() && parent[1].ToString().StartsWith("@ITEMS_")) found.Add(parent[1].ToString().Substring(7), row[0].ToString());
+                                if (row[2].ToString() == parent[0].ToString() && parent[1].ToString().StartsWith("@ITEMS_") && !found.ContainsKey(parent[1].ToString().Substring(7))) found.Add(parent[1].ToString().Substring(7), row[0].ToString());
                             }
                         }
                     }
@@ -92,6 +95,7 @@ namespace AlbionMarketeer
         {
             if (string.Empty == search.Text) return;
 
+            LoadingGif.Visibility = Visibility.Visible;
             caerleon.IsEnabled = false;
             bridgewatch.IsEnabled = false;
             martlock.IsEnabled = false;
@@ -135,13 +139,55 @@ namespace AlbionMarketeer
             task.ContinueWith(async t =>
             {
                 Result = t.Result;
+                List<string> RemoveKeys = new List<string>();
+                List<string> Level1Enchant = new List<string>();
+                List<string> Level2Enchant = new List<string>();
+                List<string> Level3Enchant = new List<string>();
+                foreach (var key in Result.Keys)
+                {
+                    if (key.EndsWith("_DESC")) RemoveKeys.Add(key);
+                    if (key.EndsWith("_LEVEL1")) Level1Enchant.Add(key);
+                    if (key.EndsWith("_LEVEL2")) Level2Enchant.Add(key);
+                    if (key.EndsWith("_LEVEL3")) Level3Enchant.Add(key);
+                }
+                foreach (var key in RemoveKeys)
+                {
+                    Result.Remove(key);
+                }
+                foreach (var key in Level1Enchant)
+                {
+                    Result.TryGetValue(key, out string value);
+                    Result.Remove(key);
+                    Result.Add(string.Concat(key, "@1"), value);
+                }
+                foreach (var key in Level2Enchant)
+                {
+                    Result.TryGetValue(key, out string value);
+                    Result.Remove(key);
+                    Result.Add(string.Concat(key, "@2"), value);
+                }
+                foreach (var key in Level3Enchant)
+                {
+                    Result.TryGetValue(key, out string value);
+                    Result.Remove(key);
+                    Result.Add(string.Concat(key, "@3"), value);
+                }
 
                 Item_keys.AddRange(Result.Keys);
                 Item_values.AddRange(Result.Values);
+                //List<string> Enchanted = File.ReadAllLines("Enchanted.txt").ToList();
 
-                string Items_joined = string.Join(",", Item_keys);
+                string Items_joined = "";
+                //List<string> item_AsEnchanted = new List<string>();
+                //foreach (var item in Item_keys)
+                //{
+                //    item_AsEnchanted.AddRange(Enchanted.FindAll(each => each.Contains(item)));
+                //}
+
+                Items_joined = string.Join(",", Item_keys);
+                //Items_joined += string.Join(",", item_AsEnchanted);
+
                 string url = $"https://www.albion-online-data.com/api/v1/stats/prices/{Items_joined}?locations={Locations_joined}";
-
                 string result = "";
                 result = await GetAPIData(url);
 
@@ -154,7 +200,7 @@ namespace AlbionMarketeer
                     if (order != null) order.Name = pair.Value;
                 }
 
-                Results.ItemsSource = apiOrders.Select(c => c.Name).Where(s => s != null).ToList();
+                Results_List.ItemsSource = apiOrders.Select(c => c.Name).Where(s => s != null).ToList();
             }, TaskScheduler.FromCurrentSynchronizationContext());
             
         }
@@ -165,6 +211,7 @@ namespace AlbionMarketeer
             log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog(response.ReasonPhrase.ToString())));
             if (response.IsSuccessStatusCode)
             {
+                LoadingGif.Visibility = Visibility.Hidden;
                 Dispatcher.Invoke(new Action(() => loading.Content = ""));
                 Dispatcher.Invoke(new Action(() => caerleon.IsEnabled = true));
                 Dispatcher.Invoke(new Action(() => bridgewatch.IsEnabled = true));
@@ -200,11 +247,11 @@ namespace AlbionMarketeer
             }
         }
 
-        private void Results_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void Results_List_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (Results.Items.Count <= 0) return;
+            if (Results_List.Items.Count <= 0) return;
 
-            int index = Item_values.FindIndex(i => i == Results.SelectedItem.ToString());
+            int index = Item_values.FindIndex(i => i == Results_List.SelectedItem.ToString());
             ShowDetails(Item_keys.ElementAt(index));
         }
 
