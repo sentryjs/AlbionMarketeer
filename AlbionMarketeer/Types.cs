@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using System.Globalization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace AlbionMarketeer
 {
@@ -56,4 +56,69 @@ namespace AlbionMarketeer
             Array.Clear(this.List, 0, this.List.Length);
         }
     }
+
+    // To parse this JSON data, add NuGet 'Newtonsoft.Json' then do:
+    //
+    //    using AlbionMarketeer;
+    //
+    //    var apiOrder = ApiOrder.FromJson(jsonString);
+    public partial class ApiOrder
+    {
+        [JsonProperty("item_id")]
+        public string ItemId { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("city")]
+        public string City { get; set; }
+
+        [JsonProperty("sell_price_min")]
+        public long SellPriceMin { get; set; }
+
+        [JsonProperty("sell_price_min_date")]
+        public string SellPriceMinDate { get; set; }
+
+        [JsonProperty("sell_price_max")]
+        public long SellPriceMax { get; set; }
+
+        [JsonProperty("sell_price_max_date")]
+        public string SellPriceMaxDate { get; set; }
+
+        [JsonProperty("buy_price_min")]
+        public long BuyPriceMin { get; set; }
+
+        [JsonProperty("buy_price_min_date")]
+        public string BuyPriceMinDate { get; set; }
+
+        [JsonProperty("buy_price_max")]
+        public long BuyPriceMax { get; set; }
+
+        [JsonProperty("buy_price_max_date")]
+        public string BuyPriceMaxDate { get; set; }
+    }
+
+    public partial class ApiOrder
+    {
+        public static List<ApiOrder> FromJson(string json) => JsonConvert.DeserializeObject<List<ApiOrder>>(json, AlbionMarketeer.Converter.Settings);
+        public void SetName(string name) => Name = name;
+    }
+
+    public static class Serialize
+    {
+        public static string ToJson(this List<ApiOrder> self) => JsonConvert.SerializeObject(self, AlbionMarketeer.Converter.Settings);
+    }
+
+    internal static class Converter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            DateParseHandling = DateParseHandling.None,
+            Converters = {
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            },
+        };
+    }
 }
+

@@ -26,7 +26,9 @@ namespace AlbionMarketeer
 
         public void AddLog(string log, bool newline = true)
         {
-            if (newline == true) this.log.AppendText(log + "\r");
+            DateTime time = DateTime.Now;
+            //string format = "yyyy MMM ddd d HH:mm ";
+            if (newline == true) this.log.AppendText(time.ToString("s") + ": " + log + "\r");
             else this.log.AppendText(log);
         }
 
