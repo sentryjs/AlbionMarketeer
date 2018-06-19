@@ -31,6 +31,8 @@ namespace AlbionMarketeer
         private void Draw()
         {
             Title.Text = apiOrders.First().Name;
+            string Uri = $"https://gameinfo.albiononline.com/api/gameinfo/items/{apiOrders.First().ItemId}";
+            Image.Source = new ImageSourceConverter().ConvertFromString(Uri) as ImageSource;
             foreach (ApiOrder order in apiOrders)
             {
                 if (order.BuyPriceMinDate != "0001-01-01T00:00:00Z")

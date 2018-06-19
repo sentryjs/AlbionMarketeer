@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlbionMarketeer"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="Albion Marketeer" Height="295" Width="414.72" ResizeMode="NoResize" Icon="favicon.ico" Closing="Window_Closing">
+        Title="Albion Marketeer" Height="295" Width="414.72" ResizeMode="NoResize" Icon="favicon.ico" Closing="Window_Closing" Topmost="True" WindowStartupLocation="CenterScreen">
     <Grid HorizontalAlignment="Left" Height="263" VerticalAlignment="Top" Width="397">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -22,10 +23,10 @@
         <Label Name="loading" Content="" Margin="131,0,266,435" VerticalAlignment="Bottom" FontSize="16"/>
         <Button Content="Show Logs" HorizontalAlignment="Left" Margin="302,53,0,0" VerticalAlignment="Top" Width="85" Click="log_button_Click" Height="21"/>
         <Button Name="search_button" Content="Search" HorizontalAlignment="Left" Margin="302,10,0,0" VerticalAlignment="Top" Width="85" Height="38" Click="SearchAsync"/>
-        <ListBox Name="Results" HorizontalAlignment="Left" Height="147" Margin="153,81,0,0" VerticalAlignment="Top" Width="234" MouseDoubleClick="Results_MouseDoubleClick"/>
+        <ListBox Name="Results_List" HorizontalAlignment="Left" Height="147" Margin="153,81,0,0" VerticalAlignment="Top" Width="234" MouseDoubleClick="Results_List_MouseDoubleClick"/>
         <Label Content="Markets" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="94" FontWeight="Bold" FontSize="16"/>
         <TextBlock Margin="0,237,296,0" TextWrapping="Wrap" Text="Created by Inaer" Width="91" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <TextBlock Margin="0,237,10,0" TextWrapping="Wrap" Text="Vigil Gaming" Width="71" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-
+        <Image Name="LoadingGif" gif:ImageBehavior.AnimatedSource="loading.gif" Margin="257,131,100,94" />
     </Grid>
 </Window>

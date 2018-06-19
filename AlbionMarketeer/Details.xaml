@@ -34,5 +34,6 @@
                 </ListView>
             </StackPanel>
         </DockPanel>
+        <Image Name="Image" HorizontalAlignment="Left" Height="63" VerticalAlignment="Top" Width="59" Margin="10,0,0,0"/>
     </Grid>
 </Window>
