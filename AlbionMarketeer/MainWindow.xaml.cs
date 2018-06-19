@@ -82,7 +82,6 @@ namespace AlbionMarketeer
                     }
                 }
 
-                if (found.Count > 0) Console.WriteLine(found.First().ToString());
                 return found;
             });
             task.ContinueWith(t => taskCompletionSource.SetResult(t.Result));
@@ -211,7 +210,7 @@ namespace AlbionMarketeer
 
         private void ShowDetails(string key)
         {
-            Details details_window = new Details(apiOrders.Find(o => o.ItemId == key));
+            Details details_window = new Details(apiOrders.FindAll(o => o.ItemId == key));
             details_window.Show();
         }
     }

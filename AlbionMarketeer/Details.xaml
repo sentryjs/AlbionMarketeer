@@ -5,28 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlbionMarketeer"
         mc:Ignorable="d"
-        Title="Details" Height="185.087" Width="463.158">
+        Title="Details" Height="280.701" Width="659.649" Icon="favicon.ico" ResizeMode="NoResize">
     <Grid Margin="0,0,0,1">
-        <TextBlock Name="Title" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="39" Width="437" FontSize="20" TextAlignment="Center"/>
-        <TextBlock HorizontalAlignment="Left" Margin="324,49,0,0" TextWrapping="Wrap" Text="Bid" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left" Margin="107,49,0,0" TextWrapping="Wrap" Text="Ask" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"/>
-        <DockPanel HorizontalAlignment="Left" Height="62" LastChildFill="False" Margin="10,80,0,0" VerticalAlignment="Top" Width="437">
-            <StackPanel Height="61" VerticalAlignment="Top" Width="218">
-                <ListView Name="Ask" Height="61" HorizontalAlignment="Stretch" >
+        <TextBlock Name="Title" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="39" Width="622" FontSize="20" TextAlignment="Center" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Left" Margin="462,54,0,0" TextWrapping="Wrap" Text="Buying" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"/>
+        <TextBlock HorizontalAlignment="Left" Margin="140,54,0,0" TextWrapping="Wrap" Text="Selling" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"/>
+        <DockPanel HorizontalAlignment="Left" Height="161" LastChildFill="False" Margin="10,78,0,0" VerticalAlignment="Top" Width="622">
+            <StackPanel Height="159" VerticalAlignment="Top" Width="320">
+                <ListView Name="Ask" Height="158" HorizontalAlignment="Stretch" Margin="0,0,10,0" >
                     <ListView.View>
                         <GridView >
-                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="75"/>
-                            <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="137"/>
+                            <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" Width="125"/>
+                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="50"/>
+                            <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="130"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
             </StackPanel>
-            <StackPanel Height="61" VerticalAlignment="Top" Width="218">
-                <ListView Name="Bid" Height="61">
+            <StackPanel Height="161" VerticalAlignment="Top" Width="286">
+                <ListView Name="Bid" Height="158" Margin="0,0,-16,0">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="75"/>
-                            <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="137"/>
+                            <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" Width="125"/>
+                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="50"/>
+                            <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="130"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

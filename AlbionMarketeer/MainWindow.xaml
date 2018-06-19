@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlbionMarketeer"
         mc:Ignorable="d"
-        Title="Albion Marketeer" Height="295" Width="406.72" Closing="Window_Closing">
+        Title="Albion Marketeer" Height="295" Width="414.72" ResizeMode="NoResize" Icon="favicon.ico" Closing="Window_Closing">
     <Grid HorizontalAlignment="Left" Height="263" VerticalAlignment="Top" Width="397">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <CheckBox Name="caerleon" Content="Caerleon Market" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
-        <CheckBox Name="bridgewatch" Content="Bridgewatch Market" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
-        <CheckBox Name="martlock" Content="Martlock Market" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
-        <CheckBox Name="thetford" Content="Thetford Market" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
-        <CheckBox Name="sterling" Content="Fort Sterling Market" HorizontalAlignment="Left" Margin="10,193,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
-        <CheckBox Name="lymhurst" Content="Lymhurst Market" HorizontalAlignment="Left" Margin="10,213,0,0" VerticalAlignment="Top" Checked="SearchAsync" Unchecked="SearchAsync"/>
+        <CheckBox Name="caerleon" Content="Caerleon Market" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="bridgewatch" Content="Bridgewatch Market" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="martlock" Content="Martlock Market" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="thetford" Content="Thetford Market" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="sterling" Content="Fort Sterling Market" HorizontalAlignment="Left" Margin="10,193,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="lymhurst" Content="Lymhurst Market" HorizontalAlignment="Left" Margin="10,213,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="search" HorizontalAlignment="Center" Height="38" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="287" Margin="10,10,100,215" FontSize="22" KeyDown="search_KeyDown"/>
         <TextBlock Height="29" TextWrapping="Wrap" Text="Search" VerticalAlignment="Bottom" FontSize="20" FontWeight="Bold" Margin="451,0,598,399"/>
         <Label Name="loading" Content="" Margin="131,0,266,435" VerticalAlignment="Bottom" FontSize="16"/>
