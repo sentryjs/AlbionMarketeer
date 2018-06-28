@@ -123,43 +123,55 @@ namespace AlbionMarketeer
                 // Reached the end of the packet
                 if (i == packet.Length - 1)
                 {
-                    //    FOREST = 1000,
-                    //    STEPPE = 2000,
-                    //    HIGHLAND = 3004,
-                    //    SWAMP = 0,
-                    //    MOUNTAIN = 4000,
-                    //    CAERLEON = 3005
-                    if (line.Contains("SWAMP_GREEN_MARKETPLACE"))
+                    //ThetfordMarket Location = 0
+                    //LymhurstMarket Location = 1000
+                    //BridgewatchMarket Location = 2000
+                    //BlackMarket Location = 3003
+                    //MartlockMarket Location = 3004
+                    //CaerleonMarket Location = 3005
+                    //FortSterlingMarket Location = 4000
+
+                    //SwampCrossMarket Location = 4
+                    //ForestCrossMarket Location = 1006
+                    //SteppeCrossMarket Location = 2002
+                    //HighlandCrossMarket Location = 3002
+                    //MountainCrossMarket Location = 4006
+                    if (line.Contains("SWAMP_GREEN_MARKETPLACE") && LocationID != 0)
                     {
                         LocationID = 0;
                         log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Location set to Thetford")));
                     }
-                    else if (line.Contains("FOREST_GREEN_MARKETPLACE"))
+                    else if (line.Contains("FOREST_GREEN_MARKETPLACE") && LocationID != 1000)
                     {
                         LocationID = 1000;
                         log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Location set to Lymhurst")));
                     }
-                    else if (line.Contains("STEPPE_GREEN_MARKETPLACE"))
+                    else if (line.Contains("STEPPE_GREEN_MARKETPLACE") && LocationID != 2000)
                     {
                         LocationID = 2000;
                         log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Location set to Bridgewatch")));
                     }
-                    else if (line.Contains("HIGHLAND_GREEN_MARKETPLACE"))
+                    else if (line.Contains("HIGHLAND_GREEN_MARKETPLACE") && LocationID != 3004)
                     {
                         LocationID = 3004;
                         log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Location set to Martlock")));
                     }
-                    else if (line.Contains("MOUNTAIN_GREEN_MARKETPLACE"))
+                    else if (line.Contains("MOUNTAIN_GREEN_MARKETPLACE") && LocationID != 4000)
                     {
                         LocationID = 4000;
                         log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Location set to Fort Sterling")));
                     }
-                    else if (line.Contains("HIGHLAND_DEAD_MARKETPLACE_CENTERCITY"))
+                    else if (line.Contains("HIGHLAND_DEAD_MARKETPLACE_CENTERCITY") && LocationID != 3005)
                     {
                         LocationID = 3005;
                         log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Location set to Caerleon")));
                     }
-
+                    else if (line.Contains("HIGHLAND_DEAD_T8_MELDBUILDING_CENTERCITY") && LocationID != 3003)
+                    {
+                        LocationID = 3003;
+                        log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Location set to BlackMarket")));
+                    }
+                    
                     //if (!line.Contains("MSG marketorders.deduped"))
                     //{
                     fullJSON += line;
@@ -181,18 +193,12 @@ namespace AlbionMarketeer
 
                 if (m.Value.StartsWith("{\"Id\":") && !m.Value.StartsWith("{\"Orders\":") && !History.Contains(marketOrder.ID.ToString()))
                 {
-                    IpV4Datagram ip = packet.Ethernet.IpV4;
-                    UdpDatagram udp = ip.Udp;
-
-                    //dynamic order = JsonConvert.DeserializeObject<dynamic>(m.Value);
-
                     marketOrder.LocationID = LocationID;
 
                     if (!History.Contains(marketOrder.ID.ToString()) && marketOrder.LocationID != -1)
                     {
                         Orders.Add(marketOrder);
                         History.Add(marketOrder.ID.ToString());
-                        //Console.WriteLine("{0}", m.Value);
                     }
                 }
                 string retval = (fullJSON.Length - 1 >= m.Index ? fullJSON.Substring(0, m.Index) : fullJSON);
@@ -215,7 +221,6 @@ namespace AlbionMarketeer
 
                 try
                 {
-                    //www.albion-online-data.com
                     Task.Factory.StartNew(() => {
                         MarketOrders_Publish(payload, numorders);
                     });

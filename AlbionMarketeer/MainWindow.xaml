@@ -11,7 +11,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
+        <CheckBox x:Name="blackmarket" Content="Black Market" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top"/>
         <CheckBox Name="caerleon" Content="Caerleon Market" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
         <CheckBox Name="bridgewatch" Content="Bridgewatch Market" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
         <CheckBox Name="martlock" Content="Martlock Market" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top"/>
@@ -24,9 +24,10 @@
         <Button Content="Show Logs" HorizontalAlignment="Left" Margin="302,53,0,0" VerticalAlignment="Top" Width="85" Click="log_button_Click" Height="21"/>
         <Button Name="search_button" Content="Search" HorizontalAlignment="Left" Margin="302,10,0,0" VerticalAlignment="Top" Width="85" Height="38" Click="SearchAsync"/>
         <ListBox Name="Results_List" HorizontalAlignment="Left" Height="147" Margin="153,81,0,0" VerticalAlignment="Top" Width="234" MouseDoubleClick="Results_List_MouseDoubleClick"/>
-        <Label Content="Markets" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="94" FontWeight="Bold" FontSize="16"/>
+        <Label Content="Markets" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="94" FontWeight="Bold" FontSize="16"/>
         <TextBlock Margin="0,237,296,0" TextWrapping="Wrap" Text="Created by Inaer" Width="91" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <TextBlock Margin="0,237,10,0" TextWrapping="Wrap" Text="Vigil Gaming" Width="71" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <Image Name="LoadingGif" gif:ImageBehavior.AnimatedSource="loading.gif" Margin="257,131,100,94" />
+        <Button Content="I" HorizontalAlignment="Left" Margin="287,53,0,0" VerticalAlignment="Top" Width="10" Height="21" Click="InfoButton_Click" RenderTransformOrigin="0.5,0.375" FontWeight="Bold" FontSize="9"/>
     </Grid>
 </Window>
