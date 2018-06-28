@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -36,6 +38,10 @@ namespace AlbionMarketeer
         public static List<string> Item_keys = new List<string>();
         public static List<string> Item_values = new List<string>();
         public static List<ApiOrder> apiOrders = new List<ApiOrder>();
+        //public static Process adc = new Process();
+
+        //public static string output;
+        //public static string error;
 
         public MainWindow()
         {
@@ -48,6 +54,23 @@ namespace AlbionMarketeer
             logic = new Logic(log_window);
 
             Task.Run(() => { logic.StartPCAP(); });
+
+            //Task.Run(() => {
+            //    string AlbionDataClient = "albiondata-client.exe";
+            //    Process[] candidates = Process.GetProcessesByName("albiondata-client");
+            //    if (candidates.Length == 0)
+            //    {
+            //        if (File.Exists(System.IO.Path.Combine(GetAppLocation(),"TPC\\AlbionDataClient",AlbionDataClient)))
+            //        {
+            //            adc.StartInfo.FileName = System.IO.Path.Combine(GetAppLocation(), "TPC\\AlbionDataClient", AlbionDataClient);
+            //            adc.Start();
+            //            //output = adc.StandardOutput.ReadToEnd();
+            //            //error = adc.StandardError.ReadToEnd();
+            //        }
+
+            //    }
+            //    adc.WaitForExit();
+            //});
         }
 
         public static string GetAppLocation()
@@ -84,7 +107,8 @@ namespace AlbionMarketeer
                         }
                     }
                 }
-
+                itemsds.Clear();
+                itemsds = null;
                 return found;
             });
             task.ContinueWith(t => taskCompletionSource.SetResult(t.Result));
@@ -96,6 +120,7 @@ namespace AlbionMarketeer
             if (string.Empty == search.Text) return;
 
             LoadingGif.Visibility = Visibility.Visible;
+            blackmarket.IsEnabled = false;
             caerleon.IsEnabled = false;
             bridgewatch.IsEnabled = false;
             martlock.IsEnabled = false;
@@ -108,7 +133,11 @@ namespace AlbionMarketeer
 
             List<string> Locations = new List<string>();
 
-            if ((bool)caerleon.IsChecked)
+            if ((bool)blackmarket.IsChecked)
+            {
+                Locations.Add("Black Market");
+            }
+            else if ((bool)caerleon.IsChecked)
             {
                 Locations.Add("Caerleon Market");
             }
@@ -173,25 +202,21 @@ namespace AlbionMarketeer
                     Result.Add(string.Concat(key, "@3"), value);
                 }
 
+                Item_keys.Clear();
+                Item_values.Clear();
                 Item_keys.AddRange(Result.Keys);
                 Item_values.AddRange(Result.Values);
-                //List<string> Enchanted = File.ReadAllLines("Enchanted.txt").ToList();
 
                 string Items_joined = "";
-                //List<string> item_AsEnchanted = new List<string>();
-                //foreach (var item in Item_keys)
-                //{
-                //    item_AsEnchanted.AddRange(Enchanted.FindAll(each => each.Contains(item)));
-                //}
 
                 Items_joined = string.Join(",", Item_keys);
-                //Items_joined += string.Join(",", item_AsEnchanted);
 
-                string url = $"https://www.albion-online-data.com/api/v1/stats/prices/{Items_joined}?locations={Locations_joined}";
+                string url = $"http://marketeer.vigilgaming.org/api/v1/market/{Items_joined}?locations={Locations_joined}";
+                //string url = $"https://www.albion-online-data.com/api/v1/stats/prices/{Items_joined}?locations={Locations_joined}";
+
                 string result = "";
                 result = await GetAPIData(url);
 
-                //dynamic obj = JsonConvert.DeserializeObject<dynamic>(result);
                 apiOrders = ApiOrder.FromJson(result);
 
                 foreach (var pair in Result)
@@ -201,6 +226,8 @@ namespace AlbionMarketeer
                 }
 
                 Results_List.ItemsSource = apiOrders.Select(c => c.Name).Where(s => s != null).ToList();
+                Result.Clear();
+                Result = null;
             }, TaskScheduler.FromCurrentSynchronizationContext());
             
         }
@@ -213,6 +240,7 @@ namespace AlbionMarketeer
             {
                 LoadingGif.Visibility = Visibility.Hidden;
                 Dispatcher.Invoke(new Action(() => loading.Content = ""));
+                Dispatcher.Invoke(new Action(() => blackmarket.IsEnabled = true));
                 Dispatcher.Invoke(new Action(() => caerleon.IsEnabled = true));
                 Dispatcher.Invoke(new Action(() => bridgewatch.IsEnabled = true));
                 Dispatcher.Invoke(new Action(() => martlock.IsEnabled = true));
@@ -236,6 +264,7 @@ namespace AlbionMarketeer
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
+            //if (adc.Responding) adc.Kill();
             System.Windows.Application.Current.Shutdown();
         }
 
@@ -259,6 +288,12 @@ namespace AlbionMarketeer
         {
             Details details_window = new Details(apiOrders.FindAll(o => o.ItemId == key));
             details_window.Show();
+        }
+
+        private void InfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Info info_window = new Info(log_window);
+            info_window.Show();
         }
     }
 }

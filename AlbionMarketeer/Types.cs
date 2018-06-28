@@ -73,11 +73,17 @@ namespace AlbionMarketeer
         [JsonProperty("city")]
         public string City { get; set; }
 
+        [JsonProperty("quality")]
+        public int Quality { get; set; }
+
         [JsonProperty("sell_price_min")]
         public long SellPriceMin { get; set; }
 
         [JsonProperty("sell_price_min_date")]
         public string SellPriceMinDate { get; set; }
+
+        [JsonProperty("sell_price_min_volume")]
+        public string SellPriceMinVolume { get; set; }
 
         [JsonProperty("sell_price_max")]
         public long SellPriceMax { get; set; }
@@ -85,17 +91,26 @@ namespace AlbionMarketeer
         [JsonProperty("sell_price_max_date")]
         public string SellPriceMaxDate { get; set; }
 
+        [JsonProperty("sell_price_max_volume")]
+        public string SellPriceMaxVolume { get; set; }
+
         [JsonProperty("buy_price_min")]
         public long BuyPriceMin { get; set; }
 
         [JsonProperty("buy_price_min_date")]
         public string BuyPriceMinDate { get; set; }
 
+        [JsonProperty("buy_price_min_volume")]
+        public string BuyPriceMinVolume { get; set; }
+
         [JsonProperty("buy_price_max")]
         public long BuyPriceMax { get; set; }
 
         [JsonProperty("buy_price_max_date")]
         public string BuyPriceMaxDate { get; set; }
+
+        [JsonProperty("buy_price_max_volume")]
+        public string BuyPriceMaxVolume { get; set; }
     }
 
     public partial class ApiOrder
