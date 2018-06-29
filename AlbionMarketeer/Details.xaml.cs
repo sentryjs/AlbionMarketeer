@@ -30,7 +30,7 @@ namespace AlbionMarketeer
 
         private void Draw()
         {
-            Title.Text = apiOrders.First().Name;
+            Header.Text = apiOrders.First().Name;
             string Uri = $"https://gameinfo.albiononline.com/api/gameinfo/items/{apiOrders.First().ItemId}";
             Image.Source = new ImageSourceConverter().ConvertFromString(Uri) as ImageSource;
             Image_Copy.Source = new ImageSourceConverter().ConvertFromString(Uri) as ImageSource;
