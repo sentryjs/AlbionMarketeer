@@ -38,10 +38,6 @@ namespace AlbionMarketeer
         public static List<string> Item_keys = new List<string>();
         public static List<string> Item_values = new List<string>();
         public static List<ApiOrder> apiOrders = new List<ApiOrder>();
-        //public static Process adc = new Process();
-
-        //public static string output;
-        //public static string error;
 
         public MainWindow()
         {
@@ -54,23 +50,6 @@ namespace AlbionMarketeer
             logic = new Logic(log_window);
 
             Task.Run(() => { logic.StartPCAP(); });
-
-            //Task.Run(() => {
-            //    string AlbionDataClient = "albiondata-client.exe";
-            //    Process[] candidates = Process.GetProcessesByName("albiondata-client");
-            //    if (candidates.Length == 0)
-            //    {
-            //        if (File.Exists(System.IO.Path.Combine(GetAppLocation(),"TPC\\AlbionDataClient",AlbionDataClient)))
-            //        {
-            //            adc.StartInfo.FileName = System.IO.Path.Combine(GetAppLocation(), "TPC\\AlbionDataClient", AlbionDataClient);
-            //            adc.Start();
-            //            //output = adc.StandardOutput.ReadToEnd();
-            //            //error = adc.StandardError.ReadToEnd();
-            //        }
-
-            //    }
-            //    adc.WaitForExit();
-            //});
         }
 
         public static string GetAppLocation()
@@ -137,33 +116,34 @@ namespace AlbionMarketeer
             {
                 Locations.Add("Black Market");
             }
-            else if ((bool)caerleon.IsChecked)
+            if ((bool)caerleon.IsChecked)
             {
                 Locations.Add("Caerleon Market");
             }
-            else if ((bool)bridgewatch.IsChecked)
+            if ((bool)bridgewatch.IsChecked)
             {
                 Locations.Add("Bridgewatch Market");
             }
-            else if ((bool)martlock.IsChecked)
+            if ((bool)martlock.IsChecked)
             {
                 Locations.Add("Martlock Market");
             }
-            else if ((bool)thetford.IsChecked)
+            if ((bool)thetford.IsChecked)
             {
                 Locations.Add("Thetford Market");
             }
-            else if ((bool)sterling.IsChecked)
+            if ((bool)sterling.IsChecked)
             {
                 Locations.Add("Fort Sterling Market");
             }
-            else if ((bool)lymhurst.IsChecked)
+            if ((bool)lymhurst.IsChecked)
             {
                 Locations.Add("Lymhurst Market");
             }
 
             string Locations_joined = string.Join(",", Locations);
 
+            log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Searching in dictionary.")));
             var task = FindItems(search.Text);
             task.ContinueWith(async t =>
             {
@@ -212,9 +192,10 @@ namespace AlbionMarketeer
                 Items_joined = string.Join(",", Item_keys);
 
                 string url = $"http://marketeer.vigilgaming.org/api/v1/market/{Items_joined}?locations={Locations_joined}";
-                //string url = $"https://www.albion-online-data.com/api/v1/stats/prices/{Items_joined}?locations={Locations_joined}";
-
                 string result = "";
+
+                log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Sending matched items to API.")));
+                log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Waiting for response.")));
                 result = await GetAPIData(url);
 
                 apiOrders = ApiOrder.FromJson(result);
@@ -264,7 +245,6 @@ namespace AlbionMarketeer
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            //if (adc.Responding) adc.Kill();
             System.Windows.Application.Current.Shutdown();
         }
 

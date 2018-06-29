@@ -327,3 +327,12 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# Inno Script Studio
+*.iss
+
+# Git Tools
+bfg-1\.13\.0\.jar
+
+# Output
+Output/
