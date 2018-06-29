@@ -184,10 +184,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TPC\AlbionDataClient\albiondata-client.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="TPC\AlbionDataClient\License.txt" />
     <Resource Include="favicon.ico" />
     <Resource Include="loading.gif" />
     <Content Include="localization.xml">

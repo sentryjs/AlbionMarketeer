@@ -56,7 +56,7 @@ namespace AlbionMarketeer
                         break;
                 }
                 if (order.BuyPriceMinDate != "0001-01-01T00:00:00Z")
-                    Bid.Items.Add(new { Location = order.City, Price = order.BuyPriceMin, Quality = quality, Volume = order.BuyPriceMinVolume, Date = order.BuyPriceMinDate });
+                    Bid.Items.Add(new { Location = order.City, Price = order.BuyPriceMax, Quality = quality, Volume = order.BuyPriceMaxVolume, Date = order.BuyPriceMaxDate });
 
                 if (order.SellPriceMinDate != "0001-01-01T00:00:00Z")
                     Ask.Items.Add(new { Location = order.City, Price = order.SellPriceMin, Quality = quality, Volume = order.SellPriceMinVolume, Date = order.SellPriceMinDate });
