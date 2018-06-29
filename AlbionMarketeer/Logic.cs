@@ -41,8 +41,6 @@ namespace AlbionMarketeer
 
         public void StartPCAP()
         {
-            //Task.Factory.StartNew(this.MarketOrders_SubscriberSync);
-
             Console.WriteLine("Starting up...");
             log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog("Starting up...")));
 
@@ -65,9 +63,6 @@ namespace AlbionMarketeer
             {
                 Thread.Sleep(1000);
                 nia = getAdapterUsedByProcess("Albion-Online");
-
-                Console.Write(".");
-                log_window.Dispatcher.Invoke(new Action(() => log_window.AddLog(".", false)));
             }
             while (nia == null);
             Console.WriteLine();
