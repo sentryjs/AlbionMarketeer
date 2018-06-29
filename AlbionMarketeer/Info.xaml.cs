@@ -45,8 +45,8 @@ namespace AlbionMarketeer
                 VcpuCount.Text = status.vcpu_count;
                 Location.Text = status.location;
                 Status.Text = status.status;
-                PendingCharges.Text = status.pending_charges;
-                CostPerMonth.Text = status.cost_per_month;
+                PendingCharges.Text = "$" + status.pending_charges;
+                CostPerMonth.Text = "$" + status.cost_per_month;
                 CurrentBandwidth.Text = status.current_bandwidth_gb;
                 AllowedBandwidth.Text = status.allowed_bandwidth_gb;
                 PowerStatus.Text = status.power_status;

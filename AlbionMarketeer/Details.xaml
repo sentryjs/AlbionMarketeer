@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Details" Height="345.701" Width="1050" Icon="favicon.ico" ResizeMode="NoResize">
     <Grid Margin="0,0,4,1">
-        <TextBlock Name="Title" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="39" Width="1020" FontSize="20" FontWeight="Bold" TextAlignment="Center"/>
+        <TextBlock Name="Header" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="39" Width="1020" FontSize="20" FontWeight="Bold" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="525,54,0,0" TextWrapping="Wrap" Text="Buying" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline" Width="505" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,54,0,0" TextWrapping="Wrap" Text="Selling" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline" Width="505" TextAlignment="Center"/>
         <ListView Name="Ask" HorizontalAlignment="Stretch" Margin="10,78,525,10" >
