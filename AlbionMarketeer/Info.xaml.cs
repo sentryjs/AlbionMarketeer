@@ -28,7 +28,6 @@ namespace AlbionMarketeer
         {
             InitializeComponent();
             log_window = log;
-
             GetServerStatusAsync();
         }
 
@@ -38,7 +37,6 @@ namespace AlbionMarketeer
             if (response.IsSuccessStatusCode)
             {
                 dynamic status = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-                MainIp.Text = status.main_ip;
                 Os.Text = status.os;
                 Ram.Text = status.ram;
                 Disk.Text = status.disk;

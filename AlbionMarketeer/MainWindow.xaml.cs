@@ -18,8 +18,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 using Newtonsoft.Json;
+using AutoUpdaterDotNET;
+
 
 namespace AlbionMarketeer
 {
@@ -39,6 +42,8 @@ namespace AlbionMarketeer
         public static List<string> Item_values = new List<string>();
         public static List<ApiOrder> apiOrders = new List<ApiOrder>();
 
+        public static string Version = "v0.0.0.1";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -48,6 +53,15 @@ namespace AlbionMarketeer
 
             log_window = new Log();
             logic = new Logic(log_window);
+
+            DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(2) };
+            timer.Tick += delegate
+            {
+                AutoUpdater.Start("http://marketeer.vigilgaming.org/download/updateInfo.xml");
+            };
+            timer.Start();
+
+            VersionControl.Text = Version;
 
             Task.Run(() => { logic.StartPCAP(); });
         }
@@ -238,11 +252,6 @@ namespace AlbionMarketeer
             }
         }
 
-        private void log_button_Click(object sender, RoutedEventArgs e)
-        {
-            log_window.Show();
-        }
-
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
@@ -270,10 +279,35 @@ namespace AlbionMarketeer
             details_window.Show();
         }
 
-        private void InfoButton_Click(object sender, RoutedEventArgs e)
+        private void LogButton_Click(object sender, MouseButtonEventArgs e)
+        {
+            log_window.Show();
+        }
+
+        private void InfoButton_Click(object sender, MouseButtonEventArgs e)
         {
             Info info_window = new Info(log_window);
             info_window.Show();
         }
+
+        private void PinButton_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (window.Topmost)
+            {
+                window.Topmost = false;
+                PinIcon.Fill = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                window.Topmost = true;
+                PinIcon.Fill = new SolidColorBrush(Colors.Blue);
+            }
+        }
+
+        private void DiscordButton_Click(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("https://discord.gg/GMGf5Zs");
+        }
+        
     }
 }
