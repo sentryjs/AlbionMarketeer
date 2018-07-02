@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:AlbionMarketeer"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>
