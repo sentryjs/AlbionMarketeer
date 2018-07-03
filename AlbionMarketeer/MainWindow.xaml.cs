@@ -42,7 +42,7 @@ namespace AlbionMarketeer
         public static List<string> Item_values = new List<string>();
         public static List<ApiOrder> apiOrders = new List<ApiOrder>();
 
-        public static string Version = "v0.0.0.1";
+        public static string Version = AssemblyName.GetAssemblyName(Assembly.GetExecutingAssembly().Location).Version.ToString();
 
         public MainWindow()
         {
@@ -54,14 +54,9 @@ namespace AlbionMarketeer
             log_window = new Log();
             logic = new Logic(log_window);
 
-            DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(2) };
-            timer.Tick += delegate
-            {
-                AutoUpdater.Start("http://marketeer.vigilgaming.org/download/updateInfo.xml");
-            };
-            timer.Start();
-
-            VersionControl.Text = Version;
+            AutoUpdater.ReportErrors = true;
+            AutoUpdater.Start("http://marketeer.vigilgaming.org/download/updateInfo.xml");
+            VersionControl.Text = string.Concat("v", Version);
 
             Task.Run(() => { logic.StartPCAP(); });
         }

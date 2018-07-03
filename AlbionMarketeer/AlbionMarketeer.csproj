@@ -219,4 +219,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if $(ConfigurationName) == Debug (
+  C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -inc:3 $(ProjectDir)Properties\AssemblyInfo.cs
+) ELSE (
+  C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -inc:2 $(ProjectDir)Properties\AssemblyInfo.cs
+)
+
+</PreBuildEvent>
+  </PropertyGroup>
 </Project>
