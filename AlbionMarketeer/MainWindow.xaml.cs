@@ -54,7 +54,6 @@ namespace AlbionMarketeer
             log_window = new Log();
             logic = new Logic(log_window);
 
-            AutoUpdater.ReportErrors = true;
             AutoUpdater.Start("http://marketeer.vigilgaming.org/download/updateInfo.xml");
             VersionControl.Text = string.Concat("v", Version);
 

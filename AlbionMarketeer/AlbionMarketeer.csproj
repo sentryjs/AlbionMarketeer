@@ -87,6 +87,16 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Hotfix|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoUpdater.NET, Version=1.4.10.0, Culture=neutral, PublicKeyToken=501435c91b35f4bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Autoupdater.NET.Official.1.4.10\lib\net462\AutoUpdater.NET.dll</HintPath>
@@ -222,10 +232,15 @@
   <PropertyGroup>
     <PreBuildEvent>if $(ConfigurationName) == Debug (
   C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -inc:3 $(ProjectDir)Properties\AssemblyInfo.cs
-) ELSE (
+)
+
+if $(ConfigurationName) == Release (
   C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -inc:2 $(ProjectDir)Properties\AssemblyInfo.cs
 )
 
+if $(ConfigurationName) == Hotfix (
+  C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -inc:4 $(ProjectDir)Properties\AssemblyInfo.cs
+)
 </PreBuildEvent>
   </PropertyGroup>
 </Project>
