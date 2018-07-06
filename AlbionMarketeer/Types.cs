@@ -7,6 +7,19 @@ using Newtonsoft.Json.Converters;
 
 namespace AlbionMarketeer
 {
+    //public struct EnetHeader
+    //{
+    //    public UInt16 peerId { get; set; }
+    //    public byte crcEnabled { get; set; }
+    //    public byte commandCount { get; set; }
+    //    public uint timestamp { get; set; }
+    //    public int challenge { get; set; }
+
+    //    public override string ToString()
+    //    {
+    //        return "Peer Id : " + peerId + " | CRC Enabled " + crcEnabled + " | Command Count " + commandCount + " | Timestamp " + timestamp + " | Challenge " + challenge;
+    //    }
+    //}
     //{"Id":153848863,"ItemTypeId":"T2_ARMOR_CLOTH_SET1","ItemGroupTypeId":"T2_ARMOR_CLOTH_SET1","LocationId":2000,"QualityLevel":3,"EnchantmentLevel":0,"UnitPriceSilver":1950000,"Amount":1,"AuctionType":"offer","Expires":"2018-06-06T05:28:11.498938"}
     public struct MarketOrder
     {
@@ -39,6 +52,27 @@ namespace AlbionMarketeer
 
         [JsonProperty(PropertyName = "Expires")]
         public string Expires;
+    }
+
+    public partial class GoldPoint
+    {
+        [JsonProperty(PropertyName = "id")]
+        public int Id;
+
+        [JsonProperty(PropertyName = "created_at")]
+        public string CreatedAt;
+
+        [JsonProperty(PropertyName = "updated_at")]
+        public string UpdatedAt;
+
+        [JsonProperty(PropertyName = "deleted_at")]
+        public string DeletedAt;
+
+        [JsonProperty(PropertyName = "timestamp")]
+        public string Timestamp;
+
+        [JsonProperty(PropertyName = "price")]
+        public int Price;
     }
 
     public class Orders
@@ -117,6 +151,11 @@ namespace AlbionMarketeer
     {
         public static List<ApiOrder> FromJson(string json) => JsonConvert.DeserializeObject<List<ApiOrder>>(json, AlbionMarketeer.Converter.Settings);
         public void SetName(string name) => Name = name;
+    }
+
+    public partial class GoldPoint
+    {
+        public static List<GoldPoint> FromJson(string json) => JsonConvert.DeserializeObject<List<GoldPoint>>(json, AlbionMarketeer.Converter.Settings);
     }
 
     public static class Serialize

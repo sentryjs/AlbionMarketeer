@@ -23,6 +23,9 @@ using System.Windows.Threading;
 using Newtonsoft.Json;
 using AutoUpdaterDotNET;
 
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
 
 namespace AlbionMarketeer
 {
@@ -31,6 +34,7 @@ namespace AlbionMarketeer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string[] _labels;
         Logic logic;
         private static HttpClient client = new HttpClient();
         public static Window window;
@@ -51,6 +55,39 @@ namespace AlbionMarketeer
 
             LoadingGif.Visibility = Visibility.Hidden;
 
+            string url = "http://marketeer.vigilgaming.org/api/v1/gold";
+            GetGold(url).ContinueWith(t =>
+            {
+                ChartValues<double> Values = new ChartValues<double>();
+                List<string> lLabels = new List<string>();
+                List<GoldPoint> points = GoldPoint.FromJson(t.Result);
+
+                Values.AddRange(points.Select(p => (double)p.Price).Reverse());
+                lLabels.AddRange(points.Select(p => p.Timestamp.Replace('T', ' ').Replace(":00.000Z", "")).Reverse());
+
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    SeriesCollection = new SeriesCollection
+                    {
+                        new LineSeries
+                        {
+                            Title = "Gold Prices (72 hours)",
+                            Values = Values,
+                            Fill = Brushes.Transparent,
+                            LineSmoothness = 0, //0: straight lines, 1: really smooth lines
+                            //PointGeometry = Geometry.Parse("m 25 70.36218 20 -28 -20 22 -8 -6 z"),
+                            PointGeometrySize = 5,
+                            PointForeground = Brushes.Gold
+                        }
+                    };
+
+                    Labels = lLabels.ToArray();
+
+                    DataContext = this;
+                });
+
+            });
+
             log_window = new Log();
             logic = new Logic(log_window);
 
@@ -58,6 +95,31 @@ namespace AlbionMarketeer
             VersionControl.Text = string.Concat("v", Version);
 
             Task.Run(() => { logic.StartPCAP(); });
+        }
+
+        private async Task<string> GetGold(string path)
+        {
+            HttpResponseMessage response = await client.GetAsync(path);
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public SeriesCollection SeriesCollection { get; set; }
+
+        public string[] Labels
+        {
+            get { return _labels; }
+            set
+            {
+                _labels = value;
+                OnPropertyChanged("Labels");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            if (PropertyChanged != null) PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public static string GetAppLocation()
@@ -104,7 +166,7 @@ namespace AlbionMarketeer
 
         private void SearchAsync(object sender, RoutedEventArgs e)
         {
-            if (string.Empty == search.Text) return;
+            if (string.Empty == search.Text.Trim()) return;
 
             LoadingGif.Visibility = Visibility.Visible;
             blackmarket.IsEnabled = false;
@@ -251,7 +313,7 @@ namespace AlbionMarketeer
             System.Windows.Application.Current.Shutdown();
         }
 
-        private void search_KeyDown(object sender, KeyEventArgs e)
+        private void Search_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -302,6 +364,12 @@ namespace AlbionMarketeer
         {
             Process.Start("https://discord.gg/GMGf5Zs");
         }
-        
+
+        private void CartesianChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Gold gold_window = new Gold();
+            gold_window.Show();
+        }
     }
+
 }

@@ -101,6 +101,12 @@
     <Reference Include="AutoUpdater.NET, Version=1.4.10.0, Culture=neutral, PublicKeyToken=501435c91b35f4bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Autoupdater.NET.Official.1.4.10\lib\net462\AutoUpdater.NET.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="NATS.Client, Version=0.8.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NATS.Client.0.8.1\lib\net45\NATS.Client.dll</HintPath>
     </Reference>
@@ -143,6 +149,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Gold.xaml.cs">
+      <DependentUpon>Gold.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Info.xaml.cs">
       <DependentUpon>Info.xaml</DependentUpon>
     </Compile>
@@ -155,6 +164,10 @@
     <Compile Include="Logic.cs" />
     <Compile Include="Publisher.cs" />
     <Compile Include="Types.cs" />
+    <Page Include="Gold.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Info.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -228,13 +241,23 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Target Name="PostBuildMacros">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="Targets" />
+    </GetAssemblyIdentity>
+    <ItemGroup>
+      <VersionNumber Include="@(Targets->'%(Version)')" />
+    </ItemGroup>
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if $(ConfigurationName) == Debug (
+  C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -reset:4 $(ProjectDir)Properties\AssemblyInfo.cs
   C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -inc:3 $(ProjectDir)Properties\AssemblyInfo.cs
 )
 
 if $(ConfigurationName) == Release (
+  C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -reset:4 $(ProjectDir)Properties\AssemblyInfo.cs
   C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -inc:2 $(ProjectDir)Properties\AssemblyInfo.cs
 )
 
@@ -242,5 +265,26 @@ if $(ConfigurationName) == Hotfix (
   C:\Users\joshu\source\repos\AssemblyInfoUtil\AssemblyInfoUtil\bin\Release\AssemblyInfoUtil.exe -inc:4 $(ProjectDir)Properties\AssemblyInfo.cs
 )
 </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEventDependsOn>
+      $(PostBuildEventDependsOn);
+      PostBuildMacros;
+    </PostBuildEventDependsOn>
+    <PostBuildEvent>if $(ConfigurationName) == Release goto :buildnsign
+if $(ConfigurationName) == Hotfix goto :buildnsign
+
+goto :exit
+
+:buildnsign
+Pushd "D:\Program Files (x86)\Inno Setup 5\"
+ISCC.exe $(SolutionDir)setup.iss
+
+Pushd "D:\Projects\albiondatajs\assets\download"
+"c:\Program Files (x86)\Windows Kits\10\bin\x86\signtool.exe" sign /f $(SolutionDir)VigilGamingORG.pfx /t http://timestamp.verisign.com/scripts/timstamp.dll AlbionMarketeerSetup.exe
+
+powershell -command "$(SolutionDir)updateInfo.ps1 @(VersionNumber)"
+
+:exit</PostBuildEvent>
   </PropertyGroup>
 </Project>

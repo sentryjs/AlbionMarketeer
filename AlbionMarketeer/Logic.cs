@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Windows;
 using System.Threading;
+using System.IO;
 
 namespace AlbionMarketeer
 {
@@ -62,7 +63,7 @@ namespace AlbionMarketeer
             do
             {
                 Thread.Sleep(1000);
-                nia = getAdapterUsedByProcess("Albion-Online");
+                nia = GetAdapterUsedByProcess("Albion-Online");
             }
             while (nia == null);
             Console.WriteLine();
@@ -106,6 +107,24 @@ namespace AlbionMarketeer
 
         private void DispatcherHandler(Packet packet)
         {
+            MemoryStream ms = new MemoryStream(packet.Buffer);
+            BinaryReader br = new BinaryReader(ms);
+
+            br.ReadBytes(28); // Read the UDP header
+
+            //EnetHeader enetHeader = new EnetHeader
+            //{
+            //    peerId = br.ReadUInt16(),
+            //    crcEnabled = br.ReadByte(),
+            //    commandCount = br.ReadByte(),
+            //    timestamp = br.ReadUInt32(),
+            //    challenge = br.ReadInt32()
+            //};
+
+            string command = br.ReadBytes(8).ToString();
+
+            //Console.WriteLine(enetHeader.ToString());
+
             string line = String.Empty;
 
             for (int i = 0; i != packet.Length; ++i)
@@ -253,7 +272,7 @@ namespace AlbionMarketeer
             return StrValue;
         }
 
-        private static NetworkInterface getAdapterUsedByProcess(string pName)
+        private static NetworkInterface GetAdapterUsedByProcess(string pName)
         {
             Process[] candidates = Process.GetProcessesByName(pName);
             if (candidates.Length == 0)
